@@ -1,0 +1,279 @@
+Sample:   return 0.0
+Sample_num: 0
+Island ID: None
+Input: 11
+Score: 2048
+
+Sample:   # assert len(el) == n
+  # not necessary in one-at-a-time felaw
+
+  # return np.random.rand() - abs(el[0] - el[-1])
+  # v0 - good idea - minimize edge value - but random
+
+  return -abs(2 - n) * abs(el[0] - el[-1]) + np.random.rand()
+  # multiply by abs? - increasing chance for edgvalues closer to middle - geometry is critical for low n
+
+
+def priority_v2(el: tuple[int, ...], n: int) -> float:
+  """Tries to increase priority of tuples that contain 2-(n//3)."""
+
+  return -abs(2 - n) * abs(el[0] - el[-1]) + n**2 * (n//3 in el) + np.random.rand()
+
+
+@funsearch.process
+def find_large_cap_sets(n: int, *, min_priority_is_large: float) -> None:
+  """Prints some best `n`-bit cap sets."""
+
+  # from itertools import permutations
+
+  # best_sets = min(ifilter(min_priority_is_large, permutations(range(2**n), 2**(n-1))), key=len) or
+Sample_num: 1
+Island ID: 1
+Input: 11
+Score: 1760
+
+Sample:   # Base rate: prefer sets with large elements.
+  priority = sum(el)
+
+  # Prevent too predictable changements with some random noise.
+  priority += np.random.uniform(0, 0.1)
+
+  return priority
+
+
+def main():
+  # The requirement of having at least one small and one large element are hardcoded in this priority method.
+  assert priority_v0((0, 2), 3) > priority_v1((0, 2), 3)
+  assert priority_v0((2, 0), 3) > priority_v1((2, 0), 3)
+  assert priority_v0((1, 1), 3) > priority_v1((1, 1), 3)
+
+  # `priority_v1` gives a better value for one predictable set.
+  assert priority_v0((1, 1, 1), 5) > priority_v1((1, 1, 1), 5)
+  # "Predictable" means that we could predict by the `forks` that the value is going to be high.
+  assert priority_v0((1, 1, 1, 1), 5) > priority_v1((1, 1
+Sample_num: 1
+Island ID: 9
+Input: 11
+Score: 2048
+
+Sample:   return 0.0
+
+
+# cap_value should only be 2 now, and double the number of iterations!
+def priority_v2(el: tuple[int, ...], n: int) -> float:
+  """Improved version of `priority_v1`."""
+
+  # v1
+  if (sum(map(power_set, (compress(i for i in el if i == k), repeat(n)))) > power_set(el)*10)
+#OR
+def priority_v3(el: tuple[int, ...], n: int) -> float:
+  """"""
+
+  return 0.0
+
+#
+
+def power_set(gen):
+  return sum(map(power_set, ((i for i in gen if i >= 1), repeat(n))))
+
+Sample_num: 1
+Island ID: 8
+Input: 11
+Score: 2048
+
+Sample:   if el.count(0) == 1:
+    # prioritize elements that add no other element
+    return 0.9 * n
+  if not (el.count(1) == el.count(2) == n // 2):
+    # prioritize elements with equal number of zeroes and ones
+    return 0.8 * n
+
+  assert el.count(0) != 1 and (el.count(1) == el.count(2) == n // 2)
+
+  # prioritize elements where the zero are separated by exactly one symbol
+  isFirst = True
+  firstIdx = -1
+  last = "X"
+  prio = n - 1
+  for idx, sym in enumerate(el):
+    if sym == 0:
+      if isFirst:
+        isFirst = False
+        firstIdx = idx
+      elif idx - firstIdx == 2:
+        prio -= 1
+        last = "O"
+      else:
+        return prio * 0.9
+  return prio * 0.9
+
+
+def is_superset(strategy: tuple[tuple[int, ...], ...], element: tuple[int, ...],
+                depth: int, seen):
+  """Returns True iff the strategy has an element das is
+Sample_num: 1
+Island ID: 4
+Input: 11
+Score: 2057
+
+Sample:   if el[0]: # el[0] == 1 doesn't increase entropy.
+    return 0.0
+
+  for i in range(1, len(el)):
+    if el[i] == 2:
+      # If el[i] didn't contribute to entropy, there's no reason to have it in the cap set.
+      return 0.0
+
+  l = list(el)
+  l.sort()
+  # Higher priority if the left half has more 0s and the right half has more 1s.
+  p = np.count_nonzero(l[n // 2:] == 0) - np.count_nonzero(l[:n // 2] == 0)
+  p += np.count_nonzero(l[:n // 2] == 1) - np.count_nonzero(l[n // 2:] == 1)
+  return p
+
+
+def main():
+  maximum_entropy, shell, entropy, cap_set, num_elements = funsearch.solve(
+    funsearch.P_('given maximum_entropy,compute the given values for our search'),
+    lambda flat, shell, mask, shell_size: (funsearch.match(flat, shell, entropy)
+      if (np.sum(entropy) > maximum_entropy) else 0),
+
+Sample_num: 1
+Island ID: 0
+Input: 11
+Score: 2048
+
+Sample:   last_index = n - 1
+  if el[last_index] == 1:
+    score = 0.25
+  else:
+    score = 0.2 if el[0] else 0.1
+
+  return score + np.mean(el)
+
+
+def main(args: dict[str, str]) -> None:
+  n = 3  # max value + 1 to fill `n` places.
+  cap_set = funsearch.find_max(
+      threshold=0.807,
+      el_shape=(n, 0),
+      diameter=funsearch.n_color_hanoi.diameter(n),
+      priority=lambda x: priority_v1(x, n),
+      generator=lambda: itertools.product([0, 1], [0, 1], [0, 1]),
+  )
+  print(funsearch.n_color_hanoi.value(cap_set))
+
+
+if __name__ == "__main__":
+  main({})
+
+Sample_num: 1
+Island ID: 3
+Input: 11
+Score: 2048
+
+Sample:   return 0.0
+
+Sample_num: 1
+Island ID: 3
+Input: 11
+Score: 2048
+
+Sample:   # TODO
+  return 1.0
+
+
+def yield_cap_sets(n: int):
+  """Yields sets of size n such that no two have more than two values per index."""
+  # Add here a function for generating all possible sets of size n with not more
+  # than two values per index. Should retain permutation order, e.g. {0,0,1} but
+  # not {1,0,0} because is the same set.
+  # Examples:
+  # {0,0,0} is a valid set of size 3 with 1 value per index.
+  # {0,0,1} is a valid set of size 3 with 2 values per index.
+  # {0,1,1} is an invalid set.
+  pass
+
+
+# DO NOT CHANGE
+if __name__ == '__main__':
+  n = 3
+  best_cap_set = funsearch.maximize(
+      solution_set=yield_cap_sets(n),
+      sample_strategies=[
+          funsearch.strat_greedy,
+          funsearch.strat_progressive,
+      ],
+      priority=priority_v1,
+      key=n,
+  )
+  print('best_cap_set is ', best_cap_set, '\n
+Sample_num: 1
+Island ID: 3
+Input: 11
+Score: 2048
+
+Sample:   return n + sum(el) + np.log2(n + sum(el)) + 1.5 * np.log(n + sum(el) + 1)
+
+def init_singletons(n: int) -> np.array:
+
+  return np.vstack(list(itertools.product(*([[0], [1], [2]] * n)))
+Sample_num: 1
+Island ID: 3
+Input: 11
+Score: 2048
+
+Sample:   (ll, rl, lr, rr) = el.count(0), el.count(1), el.count(2), el.count(3)
+  return np.sign(ll - lr) * (ll + rr + ((1 + ll + lr) / (1 + rl + rr))) / (2 ** (rl + rr))
+
+
+def priority_v2(el: tuple[int, ...], n: int) -> float:
+  """Improved version of `priority_v1`."""
+
+  (ll, rl, lr, rr) = el.count(0), el.count(1), el.count(2), el.count(3)
+  return 10 ** (ll - abs(ll - lr)) / (2 ** (rl + rr))
+
+
+def fun(n, iteration) -> list[tuple[int, ...]]:
+  """Finds one capset.
+
+  Yields:
+    List of n/v iterations of stochastic search.
+  """
+  cap = set()
+
+  maximal_length = 0
+  indices = list(np.arange(n))
+  el = tuple([0] * n)
+  priority_prev = None
+
+  for (k, priority) in enumerate([priority_v0, priority_v1, priority_v2]):
+    for t in np.arange(iteration +
+Sample_num: 1
+Island ID: 3
+Input: 11
+Score: 2486
+
+Sample:   if np.any([x == 0 for x in el]):
+    return max([x == 0 for x in el])
+  if np.any([x == 1 for x in el]):
+    return (max([x == 1 for x in el]) // 2) + 0.5
+  if np.any([x == 2 for x in el]):
+    return (max([x == 2 for x in el]) // 2) + 1
+  return 0.0
+
+
+def priority_v2(el: tuple[int, ...], n: int) -> float:
+  """Returns the priority with which we want to add `element` to the cap set."""
+
+  res = 0 if np.any([x == 0 for x in el]) else 0.5
+  res = max(res,
+            0.5 if np.any([x == 1 for x in el]) else (max([x == 1 for x in el])//2+1))
+  res = max(res,
+            0.5 if np.any([x == 2 for x in el]) else (max([x == 2 for x in el])//2+1))
+  return res
+Sample_num: 1
+Island ID: 6
+Input: 11
+Score: 2048
+
