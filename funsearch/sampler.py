@@ -63,13 +63,15 @@ class Sampler:
     self._database = database
     self._evaluators = evaluators
     self._llm = model
+    self.sample_num = 0
 
   def sample(self):
     """Continuously gets prompts, samples programs, sends them for analysis."""
+    self.sample_num +=1
     prompt = self._database.get_prompt()
     samples = self._llm.draw_samples(prompt.code)
     # This loop can be executed in parallel on remote evaluator machines.
     for sample in samples:
       chosen_evaluator = np.random.choice(self._evaluators)
       chosen_evaluator.analyse(
-          sample, prompt.island_id, prompt.version_generated)
+          sample, prompt.island_id, prompt.version_generated, self.sample_num)

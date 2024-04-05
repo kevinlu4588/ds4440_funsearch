@@ -34,7 +34,7 @@ def _extract_function_names(specification: str) -> tuple[str, str]:
 
 def run(samplers, database, iterations: int = -1):
   """Launches a FunSearch experiment."""
-
+  iterations = 1
   try:
     # This loop can be executed in parallel on remote sampler machines. As each
     # sampler enters an infinite loop, without parallelization only the first
@@ -46,5 +46,6 @@ def run(samplers, database, iterations: int = -1):
         iterations -= 1
   except KeyboardInterrupt:
     logging.info("Keyboard interrupt. Stopping.")
+  
   database.backup()
 
