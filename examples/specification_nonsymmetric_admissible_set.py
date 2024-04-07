@@ -1,6 +1,7 @@
 """Generating maximal admissible sets of different dimensionalities."""
 import itertools
 import numpy as np
+import funsearch
 
 
 def block_children(scores, admissible_set, new_element):
@@ -76,6 +77,7 @@ def solve(n: int, w: int) -> np.ndarray:
 @funsearch.run
 def evaluate(set_description: tuple[int, int]) -> int:
   """Returns the size of the constructed admissible set."""
+  print("set_description", set_description)
   n, w = set_description
   admissible_set = solve(n, w)
   return len(admissible_set)

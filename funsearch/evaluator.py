@@ -19,7 +19,7 @@ import re
 from collections.abc import Sequence
 import copy
 from typing import Any, Tuple
-
+import pickle
 from funsearch import code_manipulation
 from funsearch import programs_database
 from funsearch import sandbox
@@ -154,30 +154,32 @@ class Evaluator:
     self._sandbox = sbox
 
   def analyse(
-    self,
-    sample: str,
-    island_id: int | None,
-    version_generated: int | None,
-    sample_num : int | None,
+      self,
+      sample: str,
+      island_id: int | None,
+      version_generated: int | None,
+      sample_num : int | None,
   ) -> None:
-    """Compiles the sample into a program and executes it on test inputs."""
-    new_function, program = _sample_to_program(
-        sample, version_generated, self._template, self._function_to_evolve)
+      """Compiles the sample into a program and executes it on test inputs."""
+      new_function, program = _sample_to_program(
+          sample, version_generated, self._template, self._function_to_evolve)
 
-    scores_per_test = {}
-    with open("scores.txt", 'a') as f:
-        for current_input in self._inputs:
-            test_output, runs_ok = self._sandbox.run(
-                program, self._function_to_run, current_input, self._timeout_seconds)
-            if (runs_ok and not _calls_ancestor(program, self._function_to_evolve)
-                and test_output is not None):
-                if not isinstance(test_output, (int, float)):
-                    raise ValueError('@function.run did not return an int/float score.')
-                scores_per_test[current_input] = test_output
-                f.write(f"Sample: {sample}\n")
-                f.write(f"Sample_num: {sample_num}\n")
-                f.write(f"Island ID: {island_id}\n")
-                f.write(f"Input: {current_input}\n")
-                f.write(f"Score: {test_output}\n\n")
-    if scores_per_test:
-        self._database.register_program(new_function, island_id, scores_per_test)
+      scores_per_test = {}
+      with open("scores.pickle", 'ab') as f:  # Open file in binary append mode
+          for current_input in self._inputs:
+              test_output, runs_ok = self._sandbox.run(
+                  program, self._function_to_run, current_input, self._timeout_seconds)
+              if (runs_ok and not _calls_ancestor(program, self._function_to_evolve)
+                  and test_output is not None):
+                  if not isinstance(test_output, (int, float)):
+                      raise ValueError('@function.run did not return an int/float score.')
+                  scores_per_test[current_input] = test_output
+                  data = {
+                      "Sample_num": sample_num,
+                      "Island ID": island_id,
+                      "Score": test_output
+                  }
+                  pickle.dump(data, f)  # Dump data to pickle file
+
+      if scores_per_test:
+          self._database.register_program(new_function, island_id, scores_per_test)

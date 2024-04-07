@@ -29,8 +29,14 @@ def get_all_subclasses(cls):
 SANDBOX_TYPES = get_all_subclasses(sandbox.DummySandbox) + [sandbox.DummySandbox]
 SANDBOX_NAMES = [c.__name__ for c in SANDBOX_TYPES]
 
+def parse_tuple_string(s : str):
+    # Remove parentheses and split by commas
+    elements = s.strip("()").split(",")
+    # Convert each element to an integer
+    return tuple(int(element) for element in elements)
 
 def parse_input(filename_or_data: str):
+  print("filename_or_data", filename_or_data)
   if len(filename_or_data) == 0:
     raise Exception("No input data specified")
   p = pathlib.Path(filename_or_data)
@@ -108,7 +114,8 @@ def run(spec_file, inputs, model_name, output_path, load_backup, iterations, sam
   if load_backup:
     database.load(load_backup)
 
-  inputs = parse_input(inputs)
+  #inputs = parse_input(inputs)
+  inputs =parse_input(inputs)
 
   sandbox_class = next(c for c in SANDBOX_TYPES if c.__name__ == sandbox_type)
   evaluators = [evaluator.Evaluator(
