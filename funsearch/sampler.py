@@ -70,8 +70,13 @@ class Sampler:
     self.sample_num +=1
     prompt = self._database.get_prompt()
     samples = self._llm.draw_samples(prompt.code)
+    samples_per = len(samples)
     # This loop can be executed in parallel on remote evaluator machines.
-    for sample in samples:
+    for i in range(samples_per):
+      print("sample #: ", self.sample_num)
+      print(" i: ", i)
+      print("actual sample: ",self.sample_num*samples_per + i )
+      print("island ", prompt.island_id)
       chosen_evaluator = np.random.choice(self._evaluators)
       chosen_evaluator.analyse(
-          sample, prompt.island_id, prompt.version_generated, self.sample_num)
+          samples[i], prompt.island_id, prompt.version_generated, self.sample_num*samples_per + i)

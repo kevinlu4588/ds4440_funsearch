@@ -165,7 +165,7 @@ class Evaluator:
           sample, version_generated, self._template, self._function_to_evolve)
 
       scores_per_test = {}
-      with open("scores.pickle", 'ab') as f:  # Open file in binary append mode
+      with open("scores/1Island4Iteration.pickle", 'ab') as f:  # Open file in binary append mode
           for current_input in self._inputs:
               test_output, runs_ok = self._sandbox.run(
                   program, self._function_to_run, current_input, self._timeout_seconds)

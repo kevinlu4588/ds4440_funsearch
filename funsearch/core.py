@@ -34,15 +34,17 @@ def _extract_function_names(specification: str) -> tuple[str, str]:
 
 def run(samplers, database, iterations: int = -1):
   """Launches a FunSearch experiment."""
-  iterations = 7
+  iterations = 4
   try:
     # This loop can be executed in parallel on remote sampler machines. As each
     # sampler enters an infinite loop, without parallelization only the first
     # sampler will do any work.
     while iterations != 0:
       print("Iteration: ", iterations)
-      for s in samplers:
-        s.sample()
+      print("num samplers: ", len(samplers))
+      for i in range(len(samplers)):
+        print("sampler: ", i)
+        samplers[i].sample()
       if iterations > 0:
         iterations -= 1
   except KeyboardInterrupt:
