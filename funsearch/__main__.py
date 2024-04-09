@@ -64,8 +64,8 @@ def main(ctx):
 @main.command()
 @click.argument("spec_file", type=click.File("r"))
 @click.argument('inputs')
-#@click.option('--model_name', default="gpt-3.5-turbo-instruct", help='LLM model')
-@click.option('--model_name', default="codey", help='LLM model')
+@click.option('--model_name', default="gpt-3.5-turbo-instruct", help='LLM model')
+#@click.option('--model_name', default="codey", help='LLM model')
 
 @click.option('--output_path', default="./data/", type=click.Path(file_okay=False), help='path for logs and data')
 @click.option('--load_backup', default=None, type=click.File("rb"), help='Use existing program database')
