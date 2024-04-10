@@ -46,9 +46,9 @@ def build_graph(data):
     for island_id in range(num_islands):
         plt.plot(range(max_samples), score_matrix[island_id], label=f'Island {island_id}')
 
-    plt.xlabel('Sample ID')
-    plt.ylabel('Score')
-    plt.title('Scores per Sample ID for Each Island')
+    plt.xlabel('Sample #')
+    plt.ylabel('Size of Capset')
+    plt.title('FunSearch Capset Performance 10 Islands')
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -74,7 +74,7 @@ def build_graph1(data):
     for island_id in range(num_islands):
         plt.plot(range(max_samples), score_matrix[island_id], label=f'Island {island_id}')
 
-    plt.xlabel('Sample ID')
+    plt.xlabel('Sample #')
     plt.ylabel('Score')
     plt.title('Scores per Sample ID for Each Island')
     plt.legend()
@@ -93,7 +93,7 @@ def build_graph1(data):
 # print(data)
 # build_graph(data)
 
-new_file_path = 'scores/15Island10Iteration.pickle'
+new_file_path = 'scores/10Island10Iterations.pickle'
 data = read_pickle(new_file_path)
 print(data)
 build_graph(data)
