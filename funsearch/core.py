@@ -34,7 +34,7 @@ def _extract_function_names(specification: str) -> tuple[str, str]:
 
 def run(samplers, database, iterations: int = -1):
   """Launches a FunSearch experiment."""
-  iterations = 10
+  iterations = 5
   try:
     # This loop can be executed in parallel on remote sampler machines. As each
     # sampler enters an infinite loop, without parallelization only the first

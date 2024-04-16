@@ -48,7 +48,7 @@ def build_graph(data):
 
     plt.xlabel('Sample #')
     plt.ylabel('Size of Capset')
-    plt.title('FunSearch Capset Performance 10 Islands')
+    plt.title('PALM2 FunSearch Capset Performance 5 Islands')
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -93,7 +93,7 @@ def build_graph1(data):
 # print(data)
 # build_graph(data)
 
-new_file_path = 'scores/10Island10Iterations.pickle'
+new_file_path = 'scores/PALM_1Island2Iteration.pickle'
 data = read_pickle(new_file_path)
 print(data)
 build_graph(data)
